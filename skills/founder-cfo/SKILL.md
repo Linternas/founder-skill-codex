@@ -1,15 +1,6 @@
 ---
 name: founder-cfo
-description: >-
-  Your CFO. Builds the unit economics of a business before money is spent: what
-  one unit earns after its direct costs, the real profit margin at the planned
-  volume, the break-even point in units a day, year 1 month by month, the cash
-  needed before it pays for itself, how long the startup spend takes to earn back,
-  and what happens if the price drops, sales come in low or costs rise. Every
-  number traces to an input the user can check. Use when the user says "find the
-  profit margins", "do the numbers", "is this profitable", "break-even", "unit
-  economics", "how much do I need to start", or "run the CFO".
-argument-hint: "[path to numbers.json]"
+description: "Calculate unit economics, contribution, profit margins, break-even, first-year cash needs and payback from explicit business inputs. Use for profitability, startup budget or financial what-if analysis."
 ---
 
 # founder-cfo
@@ -17,10 +8,20 @@ argument-hint: "[path to numbers.json]"
 The person who asks "and what does that cost?" Margins decide whether a good idea
 is a business. This skill finds them, with every number traceable to an input.
 
+Use a supplied numbers JSON path; otherwise use `founder/numbers.json`. In the
+commands below, substitute that path when the user supplies one.
+
+## Locate the bundled tool
+
+Set the shell variable `SKILL_DIR` to the absolute directory containing this
+loaded `SKILL.md`, using the skill path Codex supplied. Codex does not set this
+variable automatically. Resolve bundled files there; keep the working directory
+at the user's project root so `founder/` stays in their project.
+
 Tool in this folder:
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/unit_economics.py" founder/numbers.json --out founder/cfo.md
+python3 "${SKILL_DIR}/unit_economics.py" founder/numbers.json --out founder/cfo.md
 ```
 
 ## Step 1: gather the inputs
@@ -58,7 +59,7 @@ ramp (`founder/panel/results.md`), and say how you did it.
 ## Step 2: run it
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/unit_economics.py" founder/numbers.json --out founder/cfo.md
+python3 "${SKILL_DIR}/unit_economics.py" founder/numbers.json --out founder/cfo.md
 ```
 
 It writes: the per-unit table and the contribution (what each sale leaves after
@@ -72,8 +73,8 @@ losing year 1 and a payback beyond 12 months.
 What-ifs without editing the file:
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/unit_economics.py" founder/numbers.json --price 7.00
-python3 "${CLAUDE_SKILL_DIR}/unit_economics.py" founder/numbers.json --volume 0.8
+python3 "${SKILL_DIR}/unit_economics.py" founder/numbers.json --price 7.00
+python3 "${SKILL_DIR}/unit_economics.py" founder/numbers.json --volume 0.8
 ```
 
 ## Step 3: the CFO's note
@@ -98,5 +99,5 @@ Add a short section at the top of `founder/cfo.md`, in plain words:
 ## Output
 
 `founder/numbers.json`, `founder/cfo.md`, `founder/cfo-sources.md`. Next:
-`/founder-plan` uses these numbers for the verdict; `/founder-pricing` if the
+`$founder-plan` uses these numbers for the verdict; `$founder-pricing` if the
 margin is thin.

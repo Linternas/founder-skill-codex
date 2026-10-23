@@ -116,7 +116,7 @@ def compile_plan(d, min_buy_rate=0.25):
     for ok, text in checks:
         L.append("- %s %s" % ("✓" if ok else "✗", text))
     if v == "Incomplete":
-        L.append("- No numbers yet. Run /founder-cfo, then compile again.")
+        L.append("- No numbers yet. Run $founder-cfo, then compile again.")
     L.append("")
     if numbers:
         be = numbers["breakeven_per_day"]
@@ -143,7 +143,7 @@ def compile_plan(d, min_buy_rate=0.25):
     if missing:
         L += ["## Not done yet", ""]
         for heading, skill in missing:
-            L.append("- %s: run /%s" % (heading, skill))
+            L.append("- %s: run $%s" % (heading, skill))
         L.append("")
     L.append("_The panel is simulated buyers and the numbers are projections from your inputs. Confirm demand with real"
              " customers and costs with real quotes before you spend. Not financial, legal or tax advice._")

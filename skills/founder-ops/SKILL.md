@@ -1,14 +1,6 @@
 ---
 name: founder-ops
-description: >-
-  Your operations manager. Works out how the business actually runs on day one:
-  suppliers and what they cost, who works when, the step-by-step routines for
-  opening, serving or shipping and closing, the tools to run it, the licences and
-  permits to check, and a risk register with what to do when each thing goes
-  wrong. Feeds real costs back to the CFO. Use when the user says "how do I run
-  this", "operations", "suppliers", "staffing", "SOPs", "what do I need to open",
-  "permits", or "day one".
-argument-hint: "[city or country]"
+description: "Plan suppliers, staffing, daily routines, tools, permit checks and operational risks, feeding verified costs into unit economics. Use for business operations, SOPs or opening requirements."
 ---
 
 # founder-ops
@@ -67,4 +59,4 @@ bad, and the plan.
 ## Output
 
 `founder/ops.md`, plus updated `founder/numbers.json` if real costs changed. Next:
-`/founder-launch`.
+`$founder-launch`.

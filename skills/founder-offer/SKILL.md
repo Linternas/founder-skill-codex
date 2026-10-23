@@ -1,15 +1,6 @@
 ---
 name: founder-offer
-description: >-
-  Builds an offer too good to refuse. Lists every problem the buyer hits on the way
-  to the result they want, turns each into a solution, trims to what is cheap to
-  deliver and valuable to the buyer, and stacks it with honest bonuses, a guarantee
-  the CFO can afford, real urgency and a clear name. Scores it on the value
-  equation (outcome, likelihood, time, effort) and re-tests it on a quick buyer
-  panel. Use when the user says "make my offer better", "why won't people buy",
-  "what should I include", "guarantee", "bonuses", "grand slam offer", or after the
-  panel shows people passing.
-argument-hint: "[what you sell]"
+description: "Build an affordable offer stack from buyer objections: core product, bonuses, guarantee and honest urgency; compare it with a repeat buyer panel. Use to improve an offer or address reasons buyers pass."
 ---
 
 # founder-offer
@@ -57,7 +48,12 @@ element of the stack moves which score.
 ## Step 5: re-test it
 
 Write the new offer into `founder/pitch.md` (keep the old one as
-`founder/pitch-v1.md`) and run `/founder-consumer --quick` with the same seed.
+`founder/pitch-v1.md`, or another unused version). Archive the original panel
+before re-testing so old answers cannot leak into the new run. Run
+`$founder-consumer --quick` with the same customer profile and seed. For a matched
+comparison, use the same panel size too; if the original had 100 buyers, either
+repeat 100 or run both pitches on matching 20-buyer cards. Record panel size, seed
+and execution mode for both runs.
 Report the buy rate before and after and which objections dropped. If nothing
 moved, say so: the problem may be the market or the price, not the offer.
 
@@ -71,5 +67,5 @@ moved, say so: the problem may be the market or the price, not the offer.
 ## Output
 
 `founder/offer.md` (problem list, the stack, costs, the value-equation scores, the
-re-test result) and the updated `founder/pitch.md`. Next: `/founder-cfo` to re-run
-the numbers with the stack, then `/founder-marketing`.
+re-test result) and the updated `founder/pitch.md`. Next: `$founder-cfo` to re-run
+the numbers with the stack, then `$founder-marketing`.

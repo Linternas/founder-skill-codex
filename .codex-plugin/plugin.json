@@ -1,0 +1,14 @@
+{
+  "name": "founder-skill-codex",
+  "description": "Eleven Codex skills for testing a business before launch: board review, competitor research, simulated buyers, pricing, offers, unit economics, marketing, branding, operations, launch and a business plan.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Linternas",
+    "url": "https://github.com/Linternas"
+  },
+  "homepage": "https://github.com/Linternas/founder-skill-codex",
+  "repository": "https://github.com/Linternas/founder-skill-codex",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": ["codex", "skills", "startup", "business-plan", "unit-economics", "market-validation"]
+}

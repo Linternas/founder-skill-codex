@@ -1,7 +1,9 @@
-# The Founder skill
+# Founder Skills for Codex
 
-Eleven Claude skills that test a business before you launch it. Free, MIT, no
-signup, no API key, nothing to connect.
+Eleven skills for OpenAI Codex that test a business before you launch it.
+Free, MIT; the Python tools need no extra packages, API keys or network access.
+You need a working Codex setup; research skills use the search or browsing tools
+available in your session.
 
 `skills/founder-board` `skills/founder-marketing` `skills/founder-cfo`
 `skills/founder-consumer` `skills/founder-launch` `skills/founder-pricing`
@@ -10,61 +12,105 @@ signup, no API key, nothing to connect.
 
 One of them is your board of directors, trained on the frameworks of Alex
 Hormozi, Peter Thiel and Steve Jobs. One is your marketing director. One is your
-CFO and finds your real profit margins. And one is the consumer panel: it spins
-up 100 buyer agents trained on your target customer and runs your business
-through 100 buyer scenarios.
+CFO and calculates your profit margins. And one is the consumer panel: it tests
+your pitch through 100 simulated buyer scenarios drawn from your target customer.
+The board and panel use sub-agents when available and permitted, with a disclosed
+sequential simulation when delegation is unavailable.
 
 So you know how to launch, how to market and how to actually make money, before
 you spend thousands of dollars finding out the hard way.
 
-## Install
+## Install in Codex
 
-Paste this repo link into Claude and say `install skill`:
+Requires Python 3.8+ and a Codex client with local skills support. Install the
+whole pack: pricing and plan share the CFO helper, and offer uses board lenses.
 
-```
-https://github.com/Jakeschincariol/founder-skill
-
-install skill
-```
-
-Or as a plugin, in Claude Code:
-
-```
-/plugin marketplace add Jakeschincariol/founder-skill
-/plugin install founder-skill@founder-skill
-```
-
-Claude Code namespaces plugin skills, so installed as a plugin they show up as
-`/founder-skill:founder-board` and so on. Copy the folders instead if you want
-plain `/founder-board`:
+### Copy skills for all your projects
 
 ```bash
-git clone https://github.com/Jakeschincariol/founder-skill.git
-cp -r founder-skill/skills/founder-* ~/.claude/skills/
+git clone https://github.com/Linternas/founder-skill-codex.git
+cd founder-skill-codex
+python3 install.py
 ```
 
-Project-local instead of global: copy the same folders into your repo's
-`.claude/skills/`. No Claude Code at all? Paste any single `SKILL.md` at the top
-of a chat and it runs as a mode. You lose the sub-agents and the Python tools,
-but the method works.
+This copies all eleven skill folders to `~/.agents/skills/`. It refuses to
+overwrite existing folders and checks for collisions before copying anything.
+For an update, move the existing `founder-*` folders to a backup outside the
+skills directory, then run the installer again. Unrelated skills are left alone.
 
-The tools need Python 3.8 or newer. Nothing to pip install.
+For one project instead, point the installer at that project's skills directory:
+
+```bash
+python3 install.py --dest /absolute/path/to/your-project/.agents/skills
+```
+
+In Codex, type `$` to select a skill or include its name in a prompt:
+
+```text
+$founder-board A matcha café in Toronto selling iced lattes for $6.50
+$founder-consumer --quick --seed 7
+$founder-cfo
+$founder-plan --min-buy-rate 0.25
+```
+
+Codex can also choose a skill from an ordinary request such as "pressure-test my
+business idea". If newly installed skills do not appear, restart Codex. Start
+Codex in the business project where you want the `founder/` output folder.
+
+Alternatively, ask Codex's `$skill-installer` to install all eleven directories
+under `skills/` from this repository. Installing only plan or pricing without
+`founder-cfo` leaves their Python dependency missing.
+
+### Plugin package
+
+The pack also includes `.codex-plugin/plugin.json` and a repo marketplace at
+`.agents/plugins/marketplace.json`. In a client supporting local plugins, add the
+checkout as a marketplace:
+
+```bash
+codex plugin marketplace add /absolute/path/to/founder-skill-codex
+```
+
+Then install **founder-skill-codex** from that marketplace in the plugin directory
+of your Codex desktop client. Availability of local plugin installation varies
+by client; the direct skill installer above also works without plugin support.
+Choose either the plugin or direct skills to avoid duplicate skill entries.
+
+The setup follows the official [Codex skills documentation](https://learn.chatgpt.com/docs/build-skills)
+and [plugin packaging documentation](https://developers.openai.com/plugins/build/plugins).
+
+## Running across Codex environments
+
+- **Files and shell:** the Python tools require local file access and Python.
+  Each skill resolves bundled tools from its own installed `SKILL.md` path;
+  `SKILL_DIR` in examples is a shell variable the agent sets, not a built-in
+  Codex variable. Generated files stay under `founder/` in your business project.
+- **Research:** use available search/browsing tools for current prices, suppliers
+  and official requirements. If those tools or network access are unavailable,
+  use user-provided sources and record unverified gaps instead of inventing facts.
+- **Board and buyers:** delegate only when the session exposes agent tools and
+  permits their use. Respect available slots, wait for workers and close them
+  between waves. Otherwise perform separate sequential passes and disclose that
+  one model generated the perspectives. No fixed agent count or model is required.
+- **Panel options:** `--quick` means 20 buyers; `--n N` overrides the default 100.
+  The skill translates these to the Python CLI, which accepts `--n`, not
+  `--quick`. The same seed and panel size repeat cards, not model responses.
 
 ## The eleven
 
-| command | job | what it does |
+| skill | job | what it does |
 | --- | --- | --- |
-| `/founder-board` | Board of Directors | Three board members, each a sub-agent applying one published framework (Offers, from *$100M Offers*; Monopoly, from *Zero to One*; Product, from Isaacson's *Steve Jobs*), score the idea, name what would kill it and vote. |
-| `/founder-competitors` | Competitor Scout | Maps direct competitors, indirect ones and substitutes from public sources, with prices, positioning and what their customers complain about, every fact linked. |
-| `/founder-consumer` | Consumer Panel | Spins up a swarm of buyer agents (100 by default) from your target customer, each with its own income, habits and objection, and tallies who buys, who doesn't and why. |
-| `/founder-pricing` | Pricing Strategist | Turns the panel's price answers into an acceptable price range, sets it against competitors and your margin, and picks what to test. |
-| `/founder-offer` | Offer Architect | Builds the offer stack (bonuses, guarantee, real urgency, a name) that answers the panel's objections, then re-tests it on the panel. |
-| `/founder-cfo` | CFO | Unit economics: contribution per sale, the real profit margin, break-even per day, year 1 month by month, cash needed, payback, what-ifs. |
-| `/founder-marketing` | Marketing Director | Positioning, the channels your buyers use, a dated 30-day launch campaign, ten hooks and the most you can pay for a customer. |
-| `/founder-brand` | Brand Designer | Name candidates with the trademark, domain and handle checks to run, a voice, a promise and a brief for the look. |
-| `/founder-ops` | Operations Manager | Suppliers, staffing, day-one routines, tools, the permits to check and a risk register, feeding real costs back to the CFO. |
-| `/founder-launch` | Launch Lead | A cheap real-world test first, then a dated countdown, the launch-day run sheet and the first 30 days. |
-| `/founder-plan` | Business Planner | Compiles everything into one business plan with a verdict computed from the numbers: Profitable, Not yet or Incomplete. |
+| `$founder-board` | Board of Directors | Three board perspectives, each applying one published framework (Offers, from *$100M Offers*; Monopoly, from *Zero to One*; Product, from Isaacson's *Steve Jobs*), score the idea, name what would kill it and vote. |
+| `$founder-competitors` | Competitor Scout | Maps direct competitors, indirect ones and substitutes from public sources, with prices, positioning and what their customers complain about, every fact linked. |
+| `$founder-consumer` | Consumer Panel | Simulates buyer personas (100 by default) from your target customer, each with its own income, habits and objection, and tallies who buys, who doesn't and why. |
+| `$founder-pricing` | Pricing Strategist | Turns the panel's price answers into an acceptable price range, sets it against competitors and your margin, and picks what to test. |
+| `$founder-offer` | Offer Architect | Builds the offer stack (bonuses, guarantee, real urgency, a name) that answers the panel's objections, then re-tests it on the panel. |
+| `$founder-cfo` | CFO | Unit economics: contribution per sale, the real profit margin, break-even per day, year 1 month by month, cash needed, payback, what-ifs. |
+| `$founder-marketing` | Marketing Director | Positioning, the channels your buyers use, a dated 30-day launch campaign, ten hooks and the most you can pay for a customer. |
+| `$founder-brand` | Brand Designer | Name candidates with the trademark, domain and handle checks to run, a voice, a promise and a brief for the look. |
+| `$founder-ops` | Operations Manager | Suppliers, staffing, day-one routines, tools, the permits to check and a risk register, feeding real costs back to the CFO. |
+| `$founder-launch` | Launch Lead | A cheap real-world test first, then a dated countdown, the launch-day run sheet and the first 30 days. |
+| `$founder-plan` | Business Planner | Compiles everything into one business plan with a verdict computed from the numbers: Profitable, Not yet or Incomplete. |
 
 ## How to use it
 
@@ -78,39 +124,41 @@ board -> competitors -> consumer -> pricing -> offer -> cfo -> marketing -> bran
 An example: a matcha café in Toronto, iced matcha lattes at $6.50 a cup. (Every
 input is in the example files in this repo, so you can run the tools on it.)
 
-1. **`/founder-board`** writes `founder/idea.md` from what you told it and puts it
+1. **`$founder-board`** writes `founder/idea.md` from what you told it and puts it
    in front of three board members. Each scores it, lists the risks and votes:
    fund, fund if, or pass. The conditions become a checklist for the rest.
-2. **`/founder-competitors`** maps the matcha bars and coffee shops within walking
+2. **`$founder-competitors`** maps the matcha bars and coffee shops within walking
    distance, what they charge for a latte and what their reviews complain about.
-3. **`/founder-consumer`** builds the target customer (urban professionals, 24 to
+3. **`$founder-consumer`** builds the target customer (urban professionals, 24 to
    38, who buy coffee most days), deals 100 buyer cards across income, habits and
-   objections, and runs one sub-agent per buyer. Back comes who buys, who passes,
+   objections, and runs one simulation per buyer (separate workers when available
+   and permitted). Back comes who buys, who passes,
    the reasons in their words ("my coffee place is closer", "$6.50 is steep for a
    drink") and what would flip a no.
-4. **`/founder-pricing`** reads the panel's four price answers per buyer into a
+4. **`$founder-pricing`** reads the panel's four price answers per buyer into a
    price range and checks $6.50 against it and against the competitors.
-5. **`/founder-offer`** answers the top objections with the offer (a launch-week
+5. **`$founder-offer`** answers the top objections with the offer (a launch-week
    price, a loyalty card) and re-runs a quick panel to see if the buy rate moves.
-6. **`/founder-cfo`** runs the unit economics. With the example numbers: each cup
+6. **`$founder-cfo`** runs the unit economics. With the example numbers: each cup
    leaves $4.76 after its own costs, break-even is 186 cups a day, the profit
    margin at the planned 383 cups a day is 38%, year 1 makes $93,926 on operations
    after a slow ramp, the $25,280 startup spend is earned back in month 8, and the
    founder needs $34,092 in cash before it pays for itself.
-7. **`/founder-marketing`**, **`/founder-brand`**, **`/founder-ops`** and
-   **`/founder-launch`** turn it into a 30-day campaign, a name and a look, the
+7. **`$founder-marketing`**, **`$founder-brand`**, **`$founder-ops`** and
+   **`$founder-launch`** turn it into a 30-day campaign, a name and a look, the
    suppliers and routines, and a dated launch that starts with a pop-up to test
    real buyers.
-8. **`/founder-plan`** compiles `founder/business-plan.md`. Its verdict is
+8. **`$founder-plan`** compiles `founder/business-plan.md`. Its verdict is
    computed, not written: Profitable only if every unit earns money, year 1 makes
    a profit, break-even fits capacity and enough of the panel buys.
 
-You can also run any one on its own. `/founder-consumer --quick` on an idea you
+You can also run any one on its own. `$founder-consumer --quick` on an idea you
 are only thinking about is a good way to find out if you should.
 
 ## The tools
 
-Four of them, all standard-library Python. None touch the network.
+Four of them, all standard-library Python. None touch the network. These examples
+run from this checkout; installed skills resolve each script from its skill folder.
 
 ```bash
 python3 skills/founder-cfo/unit_economics.py founder/numbers.json --out founder/cfo.md   # margins, break-even, year 1
@@ -149,7 +197,7 @@ they endorse anything. This project is not affiliated with any of them.
 **The consumer panel is simulated buyers, not customers.** It is a fast, cheap way
 to find objections, segments and wording before you spend. It is not a forecast:
 language models lean agreeable, so read the buy rate as an upper bound, and
-confirm the big calls with real people. `/founder-launch` starts with exactly that
+confirm the big calls with real people. `$founder-launch` starts with exactly that
 test. Panel answers are research; never use them as testimonials.
 
 **The numbers are only as good as the inputs.** The CFO marks every estimate as an
@@ -177,14 +225,21 @@ skills/founder-brand/        SKILL.md
 skills/founder-ops/          SKILL.md
 skills/founder-launch/       SKILL.md
 skills/founder-plan/         SKILL.md, compile.py
-tests/                       the tests for every tool
+install.py                   copies the complete pack into a Codex skills directory
+.codex-plugin/plugin.json    Codex plugin manifest
+.agents/plugins/             local plugin marketplace
+tests/                       packaging, installation and Python tool tests
 ```
 
 Your own files live in `founder/` in your project. The skills read each other's.
 
 ## Credit
 
-Made by Jake Schincariol, [opusjake.ai](https://opusjake.ai). Siblings:
+Codex adaptation maintained in [Linternas/founder-skill-codex](https://github.com/Linternas/founder-skill-codex).
+Forked from [Jakeschincariol/founder-skill](https://github.com/Jakeschincariol/founder-skill),
+originally made by Jake Schincariol, [opusjake.ai](https://opusjake.ai).
+The original project targets Claude; this fork adapts discovery, invocation, paths
+and agent workflows for Codex. Original sibling projects:
 [Arena](https://github.com/Jakeschincariol/arena-skill),
 [Replica](https://github.com/Jakeschincariol/replica-skill),
 [X](https://github.com/Jakeschincariol/x-agent-skill),

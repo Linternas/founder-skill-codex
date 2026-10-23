@@ -1,13 +1,6 @@
 ---
 name: founder-launch
-description: >-
-  Your launch lead. Builds a dated, step-by-step launch plan: a cheap real-world
-  test first (a waitlist, a pre-sale or a pop-up with a real price, so real buyers
-  confirm what the simulated panel said), then the countdown to opening day with
-  owners and deadlines, the launch-day run sheet, and the first 30 days of what to
-  measure and what to change. Use when the user says "how do I launch", "launch
-  plan", "when can I open", "launch checklist", "go live", or "soft open".
-argument-hint: "[target launch date]"
+description: "Plan a cheap real-world demand test, a dated launch countdown, opening-day run sheet and first-month reviews. Use for a launch plan, soft opening or go-live checklist."
 ---
 
 # founder-launch
@@ -30,8 +23,8 @@ big costs in `founder/numbers.json`:
 
 Write the success line before running it (for example: 50 pre-orders in two weeks
 at $6.50), and compare the result with the panel's buy rate. If real buyers fall
-well short of the panel, trust the real buyers and go back to `/founder-offer` or
-`/founder-pricing`.
+well short of the panel, trust the real buyers and go back to `$founder-offer` or
+`$founder-pricing`.
 
 ## Step 2: the countdown
 
@@ -62,4 +55,4 @@ days 7, 14 and 30 with the questions to answer.
 ## Output
 
 `founder/launch.md` with the test, the countdown, the run sheet and the 30-day
-review. Next: `/founder-plan` compiles everything into the business plan.
+review. Next: `$founder-plan` compiles everything into the business plan.

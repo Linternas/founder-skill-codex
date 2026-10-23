@@ -1,13 +1,6 @@
 ---
 name: founder-brand
-description: >-
-  Your brand designer. Names the business (with the trademark, domain and handle
-  checks to run before falling in love with a name), writes the voice, a one-line
-  promise and a tagline, and briefs the look: colours, type, logo and the first
-  things a customer sees, so they match the positioning the marketing director
-  chose. Use when the user says "name my business", "brand this", "logo", "brand
-  identity", "what should it look like", "tagline", or "brand voice".
-argument-hint: "[name ideas, if any]"
+description: "Develop business name candidates, public availability checks, brand voice, promise and a visual identity brief grounded in positioning. Use for naming, brand strategy or a logo brief."
 ---
 
 # founder-brand
@@ -20,7 +13,7 @@ positioning the pack already found, not a mood board of nice colours.
 `founder/idea.md`, `founder/marketing.md` (the positioning line and the first
 audience), `founder/competitors.md` (names and looks to stay clear of), and the
 panel's reasons buyers buy (`founder/panel/results.md`). If the positioning is
-missing, ask for it or run `/founder-marketing` first.
+missing, ask for it or run `$founder-marketing` first.
 
 ## Step 2: name candidates
 
@@ -67,4 +60,4 @@ and nothing is registered until the user registers it.
 
 ## Output
 
-`founder/brand.md`. Next: `/founder-ops` and `/founder-launch`.
+`founder/brand.md`. Next: `$founder-ops` and `$founder-launch`.

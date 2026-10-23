@@ -1,14 +1,6 @@
 ---
 name: founder-marketing
-description: >-
-  Your marketing director. Turns the buyer panel and the competitor map into
-  positioning, the channels the target customer actually uses, a 30-day launch
-  campaign with dated posts and ads, the first ten hooks, a budget split and the
-  numbers to watch. Every message answers an objection real or simulated buyers
-  raised. Use when the user says "how do I market this", "marketing plan", "launch
-  campaign", "how do I get customers", "where do I advertise", "write my ads", or
-  "positioning".
-argument-hint: "[budget]"
+description: "Turn buyer research, competitor positioning and unit economics into a dated 30-day campaign, hooks, channel choices and acquisition budget. Use to plan marketing or draft launch ads."
 ---
 
 # founder-marketing
@@ -28,7 +20,7 @@ of a generic playbook.
 - `founder/numbers.json`: what a customer is worth, which caps what you can spend to
   win one.
 
-If none of these exist, say what is missing and offer to run `/founder-consumer
+If none of these exist, say what is missing and offer to run `$founder-consumer
 --quick` first. Do not invent an audience.
 
 ## Step 2: positioning
@@ -77,4 +69,4 @@ plus 16: what goes out each day, on which channel, with the message. Include:
 
 ## Output
 
-`founder/marketing.md`. Next: `/founder-brand`, then `/founder-launch`.
+`founder/marketing.md`. Next: `$founder-brand`, then `$founder-launch`.
