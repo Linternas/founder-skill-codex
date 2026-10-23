@@ -7,8 +7,6 @@ from _load import ROOT, SKILLS_DIR
 
 SKILLS = ["founder-board", "founder-marketing", "founder-cfo", "founder-consumer", "founder-launch",
           "founder-pricing", "founder-offer", "founder-competitors", "founder-brand", "founder-ops", "founder-plan"]
-ABOUT = ("Eleven free Claude skills that test a business before you launch it: a board trained on Hormozi, "
-         "Thiel and Jobs, a marketing director, a CFO, and a consumer panel of 100 buyer agents. Free, MIT.")
 
 
 def frontmatter(path):
@@ -38,47 +36,61 @@ class Repo(unittest.TestCase):
         for s in SKILLS:
             fm, text = frontmatter(os.path.join(SKILLS_DIR, s, "SKILL.md"))
             self.assertIn("name: %s\n" % s, fm + "\n", s)
-            self.assertRegex(fm, r"description: ", s)
-            self.assertGreater(len(fm), 300, "%s description is too thin" % s)
-            self.assertGreater(len(text.splitlines()), 60, s)
+            description = re.search(r"^description: (.+)$", fm, re.M)
+            self.assertIsNotNone(description, s)
+            self.assertTrue(json.loads(description.group(1)).strip(), s)
+            self.assertEqual(set(re.findall(r"^(\w[\w-]*):", fm, re.M)), {"name", "description"})
 
     def test_tools_named_in_skills_exist(self):
         for s in SKILLS:
             _, text = frontmatter(os.path.join(SKILLS_DIR, s, "SKILL.md"))
-            for tool in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w.\-/]+\.(?:py|md))", text):
+            for tool in re.findall(r"\$\{SKILL_DIR\}/([\w.\-/]+\.(?:py|md))", text):
                 self.assertTrue(os.path.exists(os.path.normpath(os.path.join(SKILLS_DIR, s, tool))), "%s: %s" % (s, tool))
 
     def test_plugin_manifests(self):
-        with open(os.path.join(ROOT, ".claude-plugin", "plugin.json")) as fh:
+        with open(os.path.join(ROOT, ".codex-plugin", "plugin.json")) as fh:
             plugin = json.load(fh)
-        self.assertEqual(plugin["name"], "founder-skill")
-        self.assertEqual(plugin["description"], ABOUT)
+        self.assertEqual(plugin["name"], "founder-skill-codex")
+        self.assertTrue(plugin["description"].strip())
         self.assertEqual(plugin["license"], "MIT")
-        with open(os.path.join(ROOT, ".claude-plugin", "marketplace.json")) as fh:
+        self.assertEqual(os.path.realpath(os.path.join(ROOT, plugin["skills"])), os.path.realpath(SKILLS_DIR))
+        with open(os.path.join(ROOT, ".agents", "plugins", "marketplace.json")) as fh:
             market = json.load(fh)
-        self.assertEqual(market["name"], "founder-skill")
-        self.assertEqual(market["plugins"][0]["name"], "founder-skill")
-        self.assertEqual(market["plugins"][0]["source"], "./")
+        entry = market["plugins"][0]
+        self.assertEqual(entry["name"], plugin["name"])
+        source = entry["source"]
+        self.assertEqual(source["source"], "local")
+        plugin_root = os.path.realpath(os.path.join(ROOT, source["path"]))
+        self.assertTrue(os.path.isfile(os.path.join(plugin_root, ".codex-plugin", "plugin.json")))
+        self.assertEqual(entry["policy"]["installation"], "AVAILABLE")
 
-    def test_readme_carries_the_reel_copy(self):
+    def test_skill_references_resolve(self):
+        for s in SKILLS:
+            _, text = frontmatter(os.path.join(SKILLS_DIR, s, "SKILL.md"))
+            for reference in re.findall(r"\$founder-[a-z-]+", text):
+                self.assertIn(reference[1:], SKILLS, s)
+
+    def test_no_claude_runtime_dependencies(self):
+        for s in SKILLS:
+            _, text = frontmatter(os.path.join(SKILLS_DIR, s, "SKILL.md"))
+            for legacy in ("CLAUDE_SKILL_DIR", "$ARGUMENTS", "subagent_type", "Claude Code", "`/founder-"):
+                self.assertNotIn(legacy, text, s)
+
+    def test_ui_metadata(self):
+        for s in SKILLS:
+            with open(os.path.join(SKILLS_DIR, s, "agents", "openai.yaml"), encoding="utf-8") as fh:
+                text = fh.read()
+            for field in ("display_name", "short_description"):
+                value = re.search(r"^  %s: (.+)$" % field, text, re.M)
+                self.assertIsNotNone(value, s)
+                self.assertTrue(json.loads(value.group(1)).strip(), s)
+
+    def test_readme_lists_installable_skills(self):
         with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as fh:
-            readme = " ".join(fh.read().split())
-        self.assertTrue(readme.startswith("# The Founder skill"))
-        for line in (
-            "Eleven Claude skills that test a business before you launch it. Free, MIT, no signup, no API key, "
-            "nothing to connect.",
-            "One of them is your board of directors, trained on the frameworks of Alex Hormozi, Peter Thiel and "
-            "Steve Jobs. One is your marketing director. One is your CFO and finds your real profit margins. And "
-            "one is the consumer panel: it spins up 100 buyer agents trained on your target customer and runs your "
-            "business through 100 buyer scenarios.",
-            "Paste this repo link into Claude and say `install skill`",
-            "/plugin marketplace add Jakeschincariol/founder-skill",
-            "/plugin install founder-skill@founder-skill",
-            "## Fine print",
-        ):
-            self.assertIn(line, readme)
+            readme = fh.read()
         for s in SKILLS:
             self.assertIn("`skills/%s`" % s, readme)
+            self.assertIn("`$%s`" % s, readme)
 
     def test_examples_parse(self):
         for rel in ("founder-cfo/example.json", "founder-consumer/customer.example.json"):

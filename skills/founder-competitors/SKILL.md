@@ -1,15 +1,6 @@
 ---
 name: founder-competitors
-description: >-
-  Maps every competitor and the gap they leave. Finds the direct competitors,
-  indirect ones and the substitutes a buyer would use instead, from public
-  sources only, and records what each sells, at what price, how they position
-  themselves and what their customers complain about in public reviews, every fact
-  with a link. Ends with a positioning map and the gap the new business can own.
-  Use when the user says "who are my competitors", "is this market crowded", "what
-  else is out there", "competitor analysis", "find the gap", or "who am I up
-  against".
-argument-hint: "[city or market]"
+description: "Research direct competitors, indirect competitors and substitutes from linked public sources, including prices, positioning and review complaints. Use for competitor analysis or finding a market gap."
 ---
 
 # founder-competitors
@@ -29,7 +20,7 @@ instead of a guess.
 
 ## Step 1: who is there
 
-From `founder/idea.md` (write it first if missing; see `/founder-board` step 0):
+From `founder/idea.md` (write it first if missing; see `$founder-board` step 0):
 
 | type | what it means | example for a matcha café |
 | --- | --- | --- |
@@ -72,6 +63,6 @@ Write `founder/competitors.md`:
 
 ## Output
 
-`founder/competitors.csv`, `founder/competitors.md`. Next: `/founder-consumer`
-uses the complaints to write real objections; `/founder-pricing` uses the price
+`founder/competitors.csv`, `founder/competitors.md`. Next: `$founder-consumer`
+uses the complaints to write real objections; `$founder-pricing` uses the price
 range.

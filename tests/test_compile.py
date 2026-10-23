@@ -33,7 +33,7 @@ class Compile(unittest.TestCase):
     def test_no_numbers_is_incomplete(self):
         v, text = plan.compile_plan(self.d)
         self.assertEqual(v, "Incomplete")
-        self.assertIn("run /founder-cfo", text)
+        self.assertIn("run $founder-cfo", text)
 
     def test_good_numbers_and_panel_is_profitable(self):
         self.numbers()
@@ -43,7 +43,7 @@ class Compile(unittest.TestCase):
         self.assertTrue(text.startswith("# Moss Matcha Bar · Business plan"))
         self.assertIn("| Profit margin at plan | 38% per cup |", text)
         self.assertIn("40 buy · 60 pass", text)
-        self.assertIn("- The buyer panel: run /founder-consumer", text.replace("## Not done yet", ""))
+        self.assertIn("- The buyer panel: run $founder-consumer", text.replace("## Not done yet", ""))
 
     def test_a_weak_panel_means_not_yet(self):
         self.numbers()

@@ -1,0 +1,20 @@
+{
+  "name": "founder-skill-codex",
+  "interface": {
+    "displayName": "Founder Skills for Codex"
+  },
+  "plugins": [
+    {
+      "name": "founder-skill-codex",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,14 +1,6 @@
 ---
 name: founder-pricing
-description: >-
-  Finds the price buyers will actually pay. Reads the consumer panel's four price
-  answers per buyer into a Van Westendorp price-sensitivity range (too cheap, a
-  bargain, getting expensive, too expensive), sets it against what competitors
-  really charge and against the CFO's margin, and recommends a price, a price
-  ladder (good / better / best) and an opening offer to test. Use when the user
-  says "how much should I charge", "price this", "is $X too expensive", "pricing
-  strategy", "what price", or after the consumer panel.
-argument-hint: "[current price]"
+description: "Analyze buyer price answers with Van Westendorp, compare competitor prices and unit economics, and choose prices to test. Use for pricing strategy, price sensitivity or a price ladder."
 ---
 
 # founder-pricing
@@ -17,15 +9,23 @@ Price is the fastest lever on the margin and the one founders guess most. This
 skill sets it from three things you can check: what buyers said, what competitors
 charge, and what the business needs to earn.
 
+## Locate the bundled tool
+
+Set the shell variable `SKILL_DIR` to the absolute directory containing this
+loaded `SKILL.md`, using the skill path Codex supplied. Codex does not set this
+variable automatically. Resolve bundled files there; keep the working directory
+at the user's project root so `founder/` stays in their project.
+This tool also needs the sibling `founder-cfo` folder; install the full pack.
+
 Tool in this folder:
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/van_westendorp.py" founder/panel/answers --price 6.50 --out founder/pricing-curve.md
+python3 "${SKILL_DIR}/van_westendorp.py" founder/panel/answers --price 6.50 --out founder/pricing-curve.md
 ```
 
 ## Step 1: what buyers said
 
-If `/founder-consumer` ran, every buyer answered four price questions. Run the
+If `$founder-consumer` ran, every buyer answered four price questions. Run the
 tool on `founder/panel/answers` (or a CSV with the columns `too_cheap, cheap,
 expensive, too_expensive` from real surveys, which beat simulated answers every
 time). It reports:
@@ -38,7 +38,7 @@ time). It reports:
 | PME | above this, too many will not buy at all |
 
 PMC to PME is the acceptable range. If the panel has not run, say so and offer to
-run `/founder-consumer --quick` first. Do not invent a range.
+run `$founder-consumer --quick` first. Do not invent a range.
 
 ## Step 2: what competitors charge
 
@@ -55,7 +55,7 @@ CFO's tool at two or three candidate prices to see the margin and break-even at
 each:
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/../founder-cfo/unit_economics.py" founder/numbers.json --price 7.00
+python3 "${SKILL_DIR}/../founder-cfo/unit_economics.py" founder/numbers.json --price 7.00
 ```
 
 ## Step 4: decide
@@ -82,4 +82,4 @@ Write `founder/pricing.md`:
 ## Output
 
 `founder/pricing-curve.md`, `founder/pricing.md`. If the price changed, update
-`founder/numbers.json` and re-run `/founder-cfo`. Next: `/founder-offer`.
+`founder/numbers.json` and re-run `$founder-cfo`. Next: `$founder-offer`.

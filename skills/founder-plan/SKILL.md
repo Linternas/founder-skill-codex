@@ -1,15 +1,6 @@
 ---
 name: founder-plan
-description: >-
-  Your business planner. Compiles everything the other founder skills wrote (the
-  board's verdict, the competitors, the buyer panel, pricing, the offer, the CFO's
-  numbers, marketing, brand, operations and the launch plan) into one business
-  plan with a verdict at the top that is computed from the numbers, never written
-  by hand: Profitable, Not yet (with the failing numbers) or Incomplete. Adds an
-  executive summary and a one-page version for a partner, lender or investor. Use
-  when the user says "write my business plan", "put it all together", "is it
-  profitable", "give me the plan", or at the end of the founder pack.
-argument-hint: "[--min-buy-rate 0.25]"
+description: "Compile existing founder research and financial inputs into a business plan and one-pager with a computed profitability verdict. Use to assemble the plan after analysis; use founder-cfo to calculate the underlying economics."
 ---
 
 # founder-plan
@@ -17,16 +8,27 @@ argument-hint: "[--min-buy-rate 0.25]"
 The last step. One document a founder can act on, or hand to a partner or a
 lender, built only from what the pack found.
 
+If the user supplies `--min-buy-rate`, pass it to every compile command below
+and state the chosen threshold. Otherwise use the default 0.25.
+
+## Locate the bundled tool
+
+Set the shell variable `SKILL_DIR` to the absolute directory containing this
+loaded `SKILL.md`, using the skill path Codex supplied. Codex does not set this
+variable automatically. Resolve bundled files there; keep the working directory
+at the user's project root so `founder/` stays in their project.
+This tool also needs the sibling `founder-cfo` folder; install the full pack.
+
 Tool in this folder:
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/compile.py" --dir founder
+python3 "${SKILL_DIR}/compile.py" --dir founder
 ```
 
 ## Step 1: see what is there
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/compile.py" --dir founder --check
+python3 "${SKILL_DIR}/compile.py" --dir founder --check
 ```
 
 prints the verdict and each check. The checks, all computed:
@@ -37,7 +39,7 @@ prints the verdict and each check. The checks, all computed:
 4. Enough simulated buyers buy (`founder/panel/results.json`; default bar 25%,
    change it with `--min-buy-rate` and say why).
 
-If there are no numbers, the verdict is Incomplete: offer to run `/founder-cfo`.
+If there are no numbers, the verdict is Incomplete: offer to run `$founder-cfo`.
 List the other missing sections with the skill that fills each. Do not fill a
 missing section yourself from guesses.
 
@@ -58,7 +60,7 @@ changes it. Never soften a failing check.
 ## Step 3: compile
 
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/compile.py" --dir founder
+python3 "${SKILL_DIR}/compile.py" --dir founder
 ```
 
 writes `founder/business-plan.md`: title, the verdict and its checks, the key numbers

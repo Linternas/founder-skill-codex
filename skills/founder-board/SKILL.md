@@ -1,15 +1,6 @@
 ---
 name: founder-board
-description: >-
-  Your board of directors. Puts a business idea in front of a three-member board,
-  each a sub-agent reading the idea through one published framework: the Offers
-  lens (from Alex Hormozi's $100M Offers), the Monopoly lens (from Peter Thiel's
-  Zero to One) and the Product lens (from Walter Isaacson's biography of Steve
-  Jobs). Each member scores the idea, names the risks that would kill it and votes
-  fund, fund with conditions, or pass. Use when the user says "test my business
-  idea", "would this work", "pressure-test this", "what would a board say", "is
-  this a good business", or starts the founder pack on a new idea.
-argument-hint: "<the business idea, or leave blank to use the conversation>"
+description: "Pressure-test a business idea using Offers, Monopoly and Product framework lenses; write three board memos, votes, risks and funding conditions. Use when evaluating a new business or starting the founder workflow."
 ---
 
 # founder-board
@@ -17,8 +8,7 @@ argument-hint: "<the business idea, or leave blank to use the conversation>"
 The first meeting. Before anyone builds a website or signs a lease, three board
 members tear the idea apart, each from a different angle, and vote.
 
-What the user typed after `/founder-board`: `$ARGUMENTS`. If that is blank, take
-the idea from the conversation.
+Use the business idea supplied with `$founder-board` or in the conversation.
 
 ## The rule about the three names
 
@@ -49,18 +39,24 @@ budget, a market size or a competitor.
 
 ## Step 1: brief the board
 
-Write `founder/board/brief.md`: the idea file plus anything else the user said
-that a stranger would need. **Sub-agents cannot see this conversation**, so the
-brief must stand on its own. Do not add your own opinion of the idea to it.
+Write `founder/board/brief.md`: the idea file plus anything else a reviewer needs.
+Make it self-contained so every reviewer receives the same facts. Do not add your
+own opinion of the idea to it.
 
 ## Step 2: convene
 
-Launch three sub-agents in ONE message (Agent tool, `subagent_type:
-general-purpose`, one per member), each told: `Read founder/board/brief.md and
-founder-board's lenses.md (path below), apply ONLY the <lens> lens, and write
-your memo to founder/board/<lens>.md.` The lens file is `lenses.md` in this
-skill's folder (`${CLAUDE_SKILL_DIR}/lenses.md`; if that path is not expanded,
-use the base directory Claude Code printed for this skill).
+Read `lenses.md` beside this loaded `SKILL.md`, using the skill path Codex supplied.
+Apply the Offers, Monopoly and Product lenses separately, writing one memo per
+lens to `founder/board/offers.md`, `monopoly.md` and `product.md`.
+
+When Codex exposes sub-agent tools and delegation is permitted, use one reviewer
+per lens. Give each the absolute paths to the same brief and `lenses.md`, its lens
+and its output file. Respect the session's concurrency limit and wait for all
+three memos before synthesis. Do not assume workers inherit the conversation.
+
+Otherwise, perform three separate passes yourself, reading only the common brief
+and the relevant lens before each memo. Keep the perspectives distinct and tell
+the user this was a sequential review by one model, not independent agents.
 
 Each memo, in this shape:
 
@@ -92,14 +88,14 @@ its job.
 - Score the business, not the founder.
 - No made-up facts. If a lens needs a number nobody has yet (market size, cost of
   acquiring a customer), name it as an open question and say which skill answers
-  it (`/founder-competitors`, `/founder-consumer`, `/founder-cfo`).
+  it (`$founder-competitors`, `$founder-consumer`, `$founder-cfo`).
 - A PASS is a result, not a failure. Say it plainly.
 
 ## Output
 
 `founder/idea.md`, `founder/board/` (brief and three memos), `founder/board.md`.
-Then say the vote in one line and suggest the next step: `/founder-competitors`
-to see who is already there, or `/founder-consumer` to put it in front of 100
+Then say the vote in one line and suggest the next step: `$founder-competitors`
+to see who is already there, or `$founder-consumer` to put it in front of 100
 simulated buyers.
 
 ## Where the pack goes next
